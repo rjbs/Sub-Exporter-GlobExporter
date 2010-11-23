@@ -81,7 +81,7 @@ sub glob_exporter {
 
   return sub {
     my ($value, $data) = @_;
-    my $globref = $data->{class}->$globref_method;
+    my $globref = $data->{class}->$globref_method($value);
 
     my $name;
     $name = defined $value->{'-as'} ? $value->{'-as'} : $default_name;
