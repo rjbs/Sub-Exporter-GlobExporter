@@ -7,6 +7,61 @@ use Scalar::Util ();
 
 use Sub::Exporter -setup => [ qw(glob_exporter) ];
 
+=head1 SYNOPSIS
+
+First, you write something that exports globs:
+
+  package Shared::Symbol;
+
+  use Sub::Exporter;
+  use Sub::Exporter::GlobExport qw(glob_exporter);
+
+  use Sub::Exporter -setup => {
+    ...
+    collectors => { '$Symbol' => glob_exporter(Symbol => \'_shared_globref') },
+  };
+
+  sub _shared_globref { return \*Common }
+
+Now other code can import C<$Symbol> and get their C<*Symbol> made an alias to
+C<*Shared::Symbol::Symbol>.
+
+If you don't know what this means or why you'd want to do it, you may want to
+stop reading now.
+
+The other class can do something like this:
+
+  use Shared::Symbol '$Symbol';
+
+  print $Symbol; # prints the scalar entry of *Shared::Symbol::Symbol
+
+...or...
+
+  use Shared::Symbol '$Symbol' => { -as => 'SharedSymbol' };
+
+  print $SharedSymbol; # prints the scalar entry of *Shared::Symbol::Symbol
+
+=head1 OVERVIEW
+
+Sub::Exporter::GlobExporter provides only one routine, C<glob_exporter>, which
+may be called either by its full name or may be imported on request.
+
+  my $exporter = glob_exporter( $default_name, $globref_locator );
+
+The routine returns a L<collection validator|Sub::Exporter/Collector
+Configuration> that will export a glob into the importing package.  It will
+export it under the name C<$default_name>, unless an alternate name is given
+(as shown above).  The glob that is installed is specified by the
+C<$globref_locator>, which can be either the globref itself, or a reference to
+a string which will be called on the exporter
+
+For an example, see the L</SYNOPSIS>, in which a method is defined to produce
+the globref to share.  This allows the glob-exporting package to be subclassed,
+for for the subclass to choose to re-use the same glob when exporting  or to
+export a new one.
+
+=cut
+
 my $is_ref;
 BEGIN {
   $is_ref = sub {
