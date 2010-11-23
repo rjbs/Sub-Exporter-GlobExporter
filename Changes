@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.002     2010-11-23 18:34:44 America/New_York
           pass arguments to collector through to globref locator
 
 0.001     2010-11-23 15:21:43 America/New_York
