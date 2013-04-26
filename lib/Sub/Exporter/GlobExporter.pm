@@ -24,7 +24,7 @@ First, you write something that exports globs:
   sub _shared_globref { return \*Common }
 
 Now other code can import C<$Symbol> and get their C<*Symbol> made an alias to
-C<*Shared::Symbol::Symbol>.
+C<*Shared::Symbol::Common>.
 
 If you don't know what this means or why you'd want to do it, you may want to
 stop reading now.
@@ -33,13 +33,13 @@ The other class can do something like this:
 
   use Shared::Symbol '$Symbol';
 
-  print $Symbol; # prints the scalar entry of *Shared::Symbol::Symbol
+  print $Symbol; # prints the scalar entry of *Shared::Symbol::Common
 
 ...or...
 
   use Shared::Symbol '$Symbol' => { -as => 'SharedSymbol' };
 
-  print $SharedSymbol; # prints the scalar entry of *Shared::Symbol::Symbol
+  print $SharedSymbol; # prints the scalar entry of *Shared::Symbol::Common
 
 =head1 OVERVIEW
 
