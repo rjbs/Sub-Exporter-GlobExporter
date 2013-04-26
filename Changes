@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.003     2013-04-26 10:41:34 America/New_York
           fix some confusing mistakes in the docs (thanks, George Hartzell)
 
 0.002     2010-11-23 18:34:44 America/New_York
