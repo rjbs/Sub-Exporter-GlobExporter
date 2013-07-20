@@ -57,7 +57,7 @@ a string which will be called on the exporter
 
 For an example, see the L</SYNOPSIS>, in which a method is defined to produce
 the globref to share.  This allows the glob-exporting package to be subclassed,
-for for the subclass to choose to re-use the same glob when exporting or to
+for the subclass to choose to re-use the same glob when exporting or to
 export a new one.
 
 If there are entries in the arguments to the globref-exporting collector
