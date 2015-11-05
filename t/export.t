@@ -28,7 +28,20 @@ is($TestGlob::Alpha, 2, 'localization over ($TestGlob::Alpha)');
   package Renamed;
   use TestGlob q($Alpha) => { -as => 'Ctx' };
 
+  main::is($Renamed::Ctx, 2, 'imported $Alpha as Ctx');
   main::is($Ctx, 2, 'imported $Alpha as Ctx');
+}
+
+{
+  package Captured;
+  my $Ctx;
+  use TestGlob q($Alpha) => { -as => \$Ctx };
+
+  main::is($$Ctx, 2, 'imported *Alpha into $Ctx');
+
+  $$Ctx = 3;
+
+  main::is($TestGlob::Alpha, 3, 'still globby');
 }
 
 done_testing;

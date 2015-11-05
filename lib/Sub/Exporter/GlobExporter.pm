@@ -41,6 +41,13 @@ The other class can do something like this:
 
   print $SharedSymbol; # prints the scalar entry of *Shared::Symbol::Common
 
+...or...
+
+  my $glob;
+  use Shared::Symbol '$Symbol' => { -as => \$glob };
+
+  print $$glob; # prints the scalar entry of *Shared::Symbol::Common
+
 =head1 OVERVIEW
 
 Sub::Exporter::GlobExporter provides only one routine, C<glob_exporter>, which
@@ -98,19 +105,23 @@ sub glob_exporter {
 
     my $globref = $data->{class}->$globref_method(@args);
 
-    # allow a SCALAR ref in the future to do ($$as = $globref) as we allow subs
-    # to be exported into scalar refs -- rjbs, 2010-11-23
     my $name;
     $name = defined $value->{'-as'} ? $value->{'-as'} : $default_name;
 
-    my $sym = "$data->{into}::$name";
+    if (ref $name) {
+      $$name = *$globref;
+    } else {
+      my $sym = "$data->{into}::$name";
 
-    {
-      no strict 'refs';
-      *{$sym} = *$globref;
+      {
+        no strict 'refs';
+        *{$sym} = *$globref;
+      }
     }
 
+    # Why is this line here?  I have no recollection of it. -- rjbs, 2015-11-04
     $_[0] = $globref;
+
     return 1;
   }
 }
